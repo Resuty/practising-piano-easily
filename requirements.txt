@@ -1,0 +1,7 @@
+# 6.11 fails to load Qt DLLs on the current Windows/Python runtime; keep the verified line.
+PySide6>=6.8,<6.9
+mido>=1.3,<2
+python-rtmidi>=1.5,<2
+numpy>=2,<3
+sounddevice>=0.5,<1
+pytest>=8,<9
