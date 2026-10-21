@@ -2,7 +2,7 @@
 
 MIDI キーボードと楽譜を使って、音名・コード・読譜を自分のペースで練習する Windows デスクトップアプリです。
 
-[简体中文](README.zh-CN.md)
+[English](README.en.md) · [简体中文](README.zh-CN.md)
 
 ## 主な機能
 
@@ -79,7 +79,7 @@ practising_piano_easily/
   composition/   コード進行と MIDI 出力
   progress/      学習記録とレポート
   ui/            Qt の画面・表示用翻訳
-  content/       中国語・日本語の教材
+  content/       英語・中国語・日本語の教材
 tests/           自動テスト
 docs/            設計と判定仕様
 packaging/       Windows ビルド・配布用資料・第三者ライセンス

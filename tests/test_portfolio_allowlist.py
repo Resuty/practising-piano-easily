@@ -12,6 +12,9 @@ def test_portfolio_source_allowlist_excludes_private_materials():
     assert files and all(path.is_file() for path in files)
     relative = [path.relative_to(root) for path in files]
     assert Path("practising_piano_easily/content/chord_tutorial_ja.md") in relative
+    assert Path("practising_piano_easily/content/chord_tutorial_en.md") in relative
+    assert Path("README.en.md") in relative
+    assert Path("packaging/README_en.md") in relative
     assert Path("packaging/launcher.py") in relative
     assert Path("tests/test_japanese.py") in relative
     for path in relative:

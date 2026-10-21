@@ -32,7 +32,7 @@ Chord and key analysis exposes heuristic candidates, separately from user-confir
 
 SQLite stores attempts, derived mastery and settings. Related writes use transactions. CSV/JSON are exports, not a second editable store.
 
-Display translations use stable source strings and canonical combo-box values. Musical symbols, answer indices, question IDs, filenames and device names remain independent of the display language. Japanese tutorial prose is a separate authored resource; the score notes and quiz answer indices are shared.
+Display translations use stable source strings and canonical combo-box values. Musical symbols, answer indices, question IDs, filenames and device names remain independent of the display language. English and Japanese tutorial prose are separate authored resources; score notes and quiz answer indices are shared across all three languages.
 
 `paths.data_directory()` and `paths.database_path()` keep writable records outside bundled resources. Source runs use `data/`; new frozen runs use the application's local user-data directory. Legacy database locations are reused without moving or replacing their contents.
 

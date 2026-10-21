@@ -1,4 +1,4 @@
-"""Offline Chinese lessons, audible keyboard examples, and scored chapter quizzes."""
+"""Offline multilingual lessons, audible examples, and scored chapter quizzes."""
 
 import sqlite3
 import time
@@ -25,6 +25,7 @@ class TutorialPage(QWidget):
         self.database, self.session_id, self.synth = database, session_id, synth
         self.lessons = load_lessons()
         self.japanese_lessons = load_lessons("ja")
+        self.english_lessons = load_lessons("en")
         self._answers = {}
         self._linked_example = None
         self._linked_symbol = None
@@ -164,8 +165,8 @@ class TutorialPage(QWidget):
         self.reader.verticalScrollBar().setValue(scroll)
 
     def _chapter_markdown(self):
-        return (self.japanese_lessons[self.chapter.currentIndex()].markdown
-                if language.code == "ja" else self.lesson.markdown)
+        lessons = {"ja": self.japanese_lessons, "en": self.english_lessons}.get(language.code, self.lessons)
+        return lessons[self.chapter.currentIndex()].markdown
 
     def _save(self, key, value):
         try:

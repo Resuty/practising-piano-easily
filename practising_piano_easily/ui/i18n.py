@@ -5,6 +5,7 @@ import re
 from PySide6.QtCore import QObject, Signal
 
 from .ja import JA
+from .en import EN
 
 
 ZH = {
@@ -415,6 +416,7 @@ ZH = {
 # Longest phrase wins, in one pass, so translations cannot translate themselves.
 _PATTERN = re.compile(r"(?<![A-Za-z0-9_])(?:" + "|".join(re.escape(key) for key in sorted(ZH, key=len, reverse=True)) + r")(?![A-Za-z0-9_])")
 _JA_PATTERN = re.compile(r"(?<![A-Za-z0-9_])(?:" + "|".join(re.escape(key) for key in sorted(JA, key=len, reverse=True)) + r")(?![A-Za-z0-9_])")
+_EN_PATTERN = re.compile(r"(?<![A-Za-z0-9_])(?:" + "|".join(re.escape(key) for key in sorted(EN, key=len, reverse=True)) + r")(?![A-Za-z0-9_])")
 
 
 class Language(QObject):
@@ -437,8 +439,9 @@ language = Language()
 
 def tr(text: str) -> str:
     if language.code == "en":
-        return text
-    catalog, pattern = (JA, _JA_PATTERN) if language.code == "ja" else (ZH, _PATTERN)
+        catalog, pattern = EN, _EN_PATTERN
+    else:
+        catalog, pattern = (JA, _JA_PATTERN) if language.code == "ja" else (ZH, _PATTERN)
     # File paths and driver diagnostics are opaque, not catalog entries.
     for prefix in ("Saved to:\n", "Audio device unavailable:", "MIDI unavailable:",
                    "Could not open MIDI input:", "Connecting to ", "Connected:"):
@@ -446,6 +449,8 @@ def tr(text: str) -> str:
             return pattern.sub(lambda match: catalog[match[0]], prefix) + text[len(prefix):]
     if text in catalog:
         return catalog[text]
+    if language.code == "en":
+        return pattern.sub(lambda match: catalog[match[0]], text)
     suffixes = (" 長調", " 短調") if language.code == "ja" else (" 大调", " 小调")
     text = re.sub(r"\b([A-G][#b]?) (major|minor)\b", lambda m: m[1] + suffixes[m[2] == "minor"], text)
     return pattern.sub(lambda match: catalog[match[0]], text)

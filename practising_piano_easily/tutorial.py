@@ -75,7 +75,7 @@ _ACTIVITIES = (
 
 
 def load_lessons(locale="zh_CN") -> tuple[Lesson, ...]:
-    filename = "chord_tutorial_ja.md" if locale == "ja" else "chord_tutorial_zh.md"
+    filename = {"ja": "chord_tutorial_ja.md", "en": "chord_tutorial_en.md"}.get(locale, "chord_tutorial_zh.md")
     text = Path(__file__).with_name("content").joinpath(filename).read_text(encoding="utf-8")
     sections = text.strip().removeprefix("# ").split("\n# ")
     if len(sections) != len(_ACTIVITIES):

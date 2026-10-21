@@ -23,7 +23,7 @@ RUNTIME = ("PySide6", "PySide6-Addons", "PySide6-Essentials", "shiboken6", "mido
            "python-rtmidi", "numpy", "sounddevice", "cffi", "pycparser", "packaging", "setuptools")
 SOURCE_TREES = {"practising_piano_easily": {".py", ".md"}, "tests": {".py"},
                 "packaging": {".py", ".spec", ".md", ".txt", ".html"}}
-SOURCE_ROOTS = ("README.md", "README.zh-CN.md", "requirements.txt", "requirements-build.txt", "pytest.ini", "start.bat", ".gitignore")
+SOURCE_ROOTS = ("README.md", "README.en.md", "README.zh-CN.md", "requirements.txt", "requirements-build.txt", "pytest.ini", "start.bat", ".gitignore")
 DESIGN_DOCS = ("ARCHITECTURE.md", "MUSIC_THEORY.md", "TRAINING_MODEL.md", "ROADMAP.md")
 
 
@@ -140,7 +140,7 @@ def copy_licenses():
 def package():
     if not (BUNDLE / "practising-piano-easily.exe").is_file():
         raise FileNotFoundError("Build the EXE before packaging")
-    for locale in ("ja", "zh"):
+    for locale in ("ja", "zh", "en"):
         shutil.copy2(ROOT / "packaging" / f"README_{locale}.md", BUNDLE / f"README_{locale}.md")
     copy_sources()
     copy_licenses()

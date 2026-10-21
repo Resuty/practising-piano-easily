@@ -51,7 +51,7 @@ def frozen_checks():
         process.wait(timeout=5)
 
 
-def source_ui_checks():
+def source_ui_checks(locale="ja"):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     sys.path.insert(0, str(ROOT))
     from PySide6.QtWidgets import QApplication
@@ -67,7 +67,7 @@ def source_ui_checks():
     for module in (falling_piano_page, score_practice_page, online_library_page):
         if hasattr(module, "downloaded_scores"):
             module.downloaded_scores = lambda: []
-    app = QApplication([])
+    app = QApplication.instance() or QApplication([])
     # The offscreen platform does not enumerate Windows system fonts automatically.
     for filename in ("YuGothM.ttc", "meiryo.ttc", "seguisym.ttf", "segoeui.ttf"):
         font = Path(os.environ.get("SYSTEMROOT", "C:\\Windows")) / "Fonts" / filename
@@ -75,12 +75,12 @@ def source_ui_checks():
             QFontDatabase.addApplicationFont(str(font))
     app.setFont(QFont("Yu Gothic", 10))
     database = Database(":memory:")
-    database.set_setting("language", "ja")
+    database.set_setting("language", locale)
     window = MainWindow(database)
     window._skip_summary = True
     window.resize(1440, 960)
     window.show()
-    pictures = CHECKS / "japanese-ui"
+    pictures = CHECKS / ("japanese-ui" if locale == "ja" else "english-ui")
     pictures.mkdir(exist_ok=True)
     for name, page in (("home", window.home), ("beginner", window.beginner), ("tutorial", window.tutorial),
                        ("falling", window.falling), ("score", window.score_practice)):
@@ -89,16 +89,16 @@ def source_ui_checks():
         window.resize(1440, 960)
         app.processEvents()
         assert window.grab().save(str(pictures / f"{name}.png"))
-    assert language.code == "ja"
+    assert language.code == locale
     for page in (window.beginner, window.falling, window.score_practice):
         assert page is not None
     window.close()
-    return {"source_japanese_ui_render": "passed", "screenshots": 5,
+    return {f"source_{locale}_ui_render": "passed", f"source_{locale}_screenshots": 5,
             "source_note": "In-memory database, simulated MIDI discovery/audio inventory; not a physical keyboard test."}
 
 
 if __name__ == "__main__":
     CHECKS.mkdir(parents=True, exist_ok=True)
-    result = frozen_checks() | source_ui_checks()
+    result = frozen_checks() | source_ui_checks() | source_ui_checks("en")
     (CHECKS / "verification.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(result, ensure_ascii=False))

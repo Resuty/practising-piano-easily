@@ -88,7 +88,7 @@ def test_tutorial_quiz_read_status_and_example_handoff(window, app):
     rows = window.database.connection.execute("SELECT * FROM attempts").fetchall()
     assert len(rows) == 1 and rows[0]["correct"] == 1
     assert rows[0]["question"] == "tutorial:inversions:1"
-    assert quiz.explanation in page.feedback.text()
+    assert tr(quiz.explanation) in page.feedback.text()
     page.read.setChecked(True)
     assert window.database.get_setting("tutorial_read_inversions") == "1"
     window._tutorial_practice(page.current_example)
@@ -157,7 +157,7 @@ def test_switch_language_does_not_erase_quiz_feedback(window):
     assert "错误" in page.feedback.text()
     window.language_selector.setCurrentIndex(1)
     assert "Wrong" in page.feedback.text()
-    assert quiz.explanation in page.feedback.text()
+    assert tr(quiz.explanation) in page.feedback.text()
     assert not page.submit.isEnabled()
     assert window.database.connection.execute("SELECT correct FROM attempts").fetchone()[0] == 0
 
